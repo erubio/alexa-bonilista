@@ -1,0 +1,29 @@
+{
+  "name": "bonilista",
+  "version": "0.1.0",
+  "description": "Alexa Skill to read \"La Bonilista\"",
+  "main": "bonilista.js",
+  "scripts": {
+    "start": "node bonilista.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bonilista",
+    "skill",
+    "alexa"
+  ],
+  "author": "Ezequiel Rubio <eze.rubio@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ask-sdk-core": "^2.10.1",
+    "ask-sdk-express-adapter": "^2.10.0",
+    "ask-sdk-model": "^1.34.1",
+    "express": "^4.17.1",
+    "jsdom": "^16.5.1",
+    "node-fetch": "^2.6.1",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "eslint": "^7.20.0"
+  }
+}
