@@ -13,9 +13,9 @@ const processContent = (entryContent) => {
   return JSDOM.fragment(withoutHead)
     .textContent.replace(/\n+\s+/gi, texts.shortPause)
     .replace(/^.*min\.\saprox\.<break time="1s" \/>/, "")
-    .replace(/© Ilustraci.*\Bilbao./i, '')
+    .replace(/© Ilustraci.*Bilbao./i, '')
     .replace('#Bonilista', 'Bonilista')
-    .replace(/[\uE000-\uF8FF]/g, '')
+    .replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '')
     .replace(/Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i, '');
 };
 
