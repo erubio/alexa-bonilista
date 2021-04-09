@@ -11,6 +11,6 @@ module.exports = {
     sectionReprompt: 'Puedes pedirme las bonilistas de las últimas 10 semanas, por ejemplo Leeme la última bonilista, o la bonilista de hace 2 semanas.',
     shortPause: '<break time="1s" />',
     title: 'La bonilista',
-    welcomeText: 'Te damos la bienvendida a la Bonilista, camarada del metal. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas, ¿Cúal quieres escuchar?',
-    welcomeTextCard: 'Te damos la bienvendida a la Bonilista, camarada del metal. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas, ¿Cúal quieres escuchar?'
+    welcomeText: 'Te damos la bienvenida a la Bonilista, camarada del metal. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas, ¿Cúal quieres escuchar?',
+    welcomeTextCard: 'Te damos la bienvenida a la Bonilista, camarada del metal. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas, ¿Cúal quieres escuchar?'
 }
