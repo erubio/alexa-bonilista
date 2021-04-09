@@ -1,8 +1,8 @@
 const fetch = require("node-fetch");
 const xml2js = require("xml2js");
-//const texts = require("../../resources/texts");
 const { JSDOM } = require("jsdom");
 const { FEED_URL } = require("../utils/constants");
+const texts = require("../../resources/texts");
 const parser = new xml2js.Parser({ attrkey: "type" });
 
 const processContent = (entryContent) => {
@@ -11,8 +11,11 @@ const processContent = (entryContent) => {
     ""
   );
   return JSDOM.fragment(withoutHead)
-    .textContent.replace(/\n+\s+/gi, '<break time="1.5s" />')
+    .textContent.replace(/\n+\s+/gi, texts.shortPause)
     .replace(/^.*min\.\saprox\.<break time="1.5s" \/>/, "")
+    .replace(/© Ilustraci.*\Bilbao./i, '')
+    .replace('#Bonilista', 'Bonilista')
+    .replace(/[\uE000-\uF8FF]/g, '')
     .replace(/Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i, '');
 };
 
