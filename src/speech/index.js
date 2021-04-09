@@ -2,11 +2,9 @@ const texts = require("../../resources/texts");
 const { getFeed } = require("../feed");
 
 let speechCache = [];
-const CACHE_TIME = 10 * 60 * 1000; //10 minutes
+const CACHE_TIME = 12 *60 * 60 * 1000; //12 hour
 
 const generateFeedSpeach = (info) => {
-  console.log('generateFeed')
-  console.log(info)
   return `${info.title}${texts.longPause}${info.content}${texts.longPause}${texts.endBonilista}`;
 };
 
@@ -26,7 +24,7 @@ module.exports.loadAndRefreshFeedCache = () => {
 };
 
 module.exports.getSpeechNewsletter = (index) => {
-  if (index > 4) {
+  if (index > 10) {
     return texts.helpText;
   } else if (speechCache[index]){
     return speechCache[index].content;

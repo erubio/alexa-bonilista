@@ -27,22 +27,35 @@ module.exports.ErrorHandler = {
 };
 
 const getBonilistaNewsletter = (handlerInput) => {
-  const dateTime =
+  return handlerInput.responseBuilder
+    .speak(speech.getSpeechNewsletter(0))
+    .reprompt(texts.sectionReprompt)
+    .withSimpleCard(texts.title, texts.helpTextCard)
+    .getResponse();
+};
+
+const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
+  return handlerInput.responseBuilder
+    .speak(speech.getSpeechNewsletter(1))
+    .reprompt(texts.sectionReprompt)
+    .withSimpleCard(texts.title, texts.helpTextCard)
+    .getResponse();
+};
+
+const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
+  const weeksAgo =
     handlerInput.requestEnvelope.request.intent.slots &&
-    handlerInput.requestEnvelope.request.intent.slots.When &&
-    handlerInput.requestEnvelope.request.intent.slots.When.value;
-  if (dateTime) {
-    if (dateTime) {
-      return handlerInput.responseBuilder
-        .speak(speech.getSpeechNewsletter(index || 0))
-        .reprompt(texts.sectionReprompt)
-        .withSimpleCard(texts.title, texts.helpTextCard)
-        .getResponse();
-    } else {
-      return getHelpResponse(handlerInput);
-    }
+    handlerInput.requestEnvelope.request.intent.slots.WeeksAgo &&
+    handlerInput.requestEnvelope.request.intent.slots.WeeksAgo.value;
+
+  if (weeksAgo) {
+    return handlerInput.responseBuilder
+      .speak(speech.getSpeechNewsletter(weeksAgo || 0))
+      .reprompt(texts.sectionReprompt)
+      .withSimpleCard(texts.title, texts.helpTextCard)
+      .getResponse();
   } else {
-    return getStopResponse(handlerInput);
+    getHelpResponse(handlerInput);
   }
 };
 
@@ -65,8 +78,12 @@ module.exports.IntentRequestHandler = {
   },
   handle(handlerInput) {
     switch (handlerInput.requestEnvelope.request.intent.name) {
-      case "GetBonilista":
+      case "GetBonilistaWeeksAgo":
+        return getBonilistaWeeksAgoNewsletter(handlerInput);
+      case "GetLastBonilista":
         return getBonilistaNewsletter(handlerInput);
+      case "GetPrevBonilista":
+        return getBonilistaNewsletterOneWeekAgo(handlerInput);
       case "AMAZON.CancelIntent":
       case "AMAZON.StopIntent":
         return getStopResponse(handlerInput);

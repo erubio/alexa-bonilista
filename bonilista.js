@@ -10,8 +10,6 @@ const PORT = process.env.BONI_PORT || 8081;
 
 const speech = require('./src/speech');
 
-//app.use(express.static("public"));
-
 skillBuilder
   .addRequestHandlers(
     handlers.LaunchRequestHandler,
@@ -22,7 +20,6 @@ skillBuilder
 
 speech.loadAndRefreshFeedCache();
 
-app.post("/bonilista", adapter.getRequestHandlers());
-app.get("/bonilista", speech.getSpeechNewsletter);
+app.post("/", adapter.getRequestHandlers());
 
 app.listen(PORT);
