@@ -12,7 +12,7 @@ const processContent = (entryContent) => {
   );
   return JSDOM.fragment(withoutHead)
     .textContent.replace(/\n+\s+/gi, texts.shortPause)
-    .replace(/^.*min\.\saprox\.<break time="1.5s" \/>/, "")
+    .replace(/^.*min\.\saprox\.<break time="1s" \/>/, "")
     .replace(/© Ilustraci.*\Bilbao./i, '')
     .replace('#Bonilista', 'Bonilista')
     .replace(/[\uE000-\uF8FF]/g, '')
