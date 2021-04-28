@@ -39,12 +39,9 @@ const removeHeadContent = content => {
 
 const getArticleContent = content => {
   const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
-  const emojiRegex = new RegExp(
-    "([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])",
-    "g"
-  );
-  const ilustrationRegex = new RegExp('© Ilustraci.*Bilbao.' , 'i');
-  const endRegex = new RegExp('Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+', 'i');
+  const emojiRegex = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
+  const ilustrationRegex = /© Ilustraci.*Bilbao/i;
+  const endRegex = /Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i;
   return JSDOM.fragment(removeHeadContent(content))
     .textContent.replace(/\n+\s+/gi, texts.pause)
     .replace(durationRegex, "")
