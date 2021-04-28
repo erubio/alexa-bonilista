@@ -47,6 +47,7 @@ const getArticleContent = content => {
     .replace(durationRegex, "")
     .replace(ilustrationRegex, "")
     .replace("#Bonilista", "Bonilista")
+    .replace(/&/g, "and")
     .replace(emojiRegex, "")
     .replace(endRegex, "");
 }
