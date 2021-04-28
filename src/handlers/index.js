@@ -28,7 +28,7 @@ module.exports.ErrorHandler = {
 
 const getBonilistaNewsletter = (handlerInput) => {
   return handlerInput.responseBuilder
-    .speak(speech.getSpeechNewsletter(0))
+    .speak(speech.getSpeechNewsletter(0), handlerInput)
     .reprompt(texts.sectionReprompt)
     .withSimpleCard(texts.title, texts.helpTextCard)
     .getResponse();
@@ -36,7 +36,7 @@ const getBonilistaNewsletter = (handlerInput) => {
 
 const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
   return handlerInput.responseBuilder
-    .speak(speech.getSpeechNewsletter(1))
+    .speak(speech.getSpeechNewsletter(1), handlerInput)
     .reprompt(texts.sectionReprompt)
     .withSimpleCard(texts.title, texts.helpTextCard)
     .getResponse();
@@ -50,7 +50,7 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
 
   if (weeksAgo) {
     return handlerInput.responseBuilder
-      .speak(speech.getSpeechNewsletter(weeksAgo || 0))
+      .speak(speech.getSpeechNewsletter(weeksAgo || 0), handlerInput)
       .reprompt(texts.sectionReprompt)
       .withSimpleCard(texts.title, texts.helpTextCard)
       .getResponse();

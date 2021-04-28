@@ -59,14 +59,8 @@ module.exports.loadAndRefreshFeedCache = () => {
 
 module.exports.getSpeechNewsletterPart = (handlerInput) => {
   const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-  const bonilistaIndex = getSlotValue(
-    handlerInput.requestEnvelope,
-    "bonilistaIndex"
-  );
-  const bonilistaPart = getSlotValue(
-    handlerInput.requestEnvelope,
-    "bonilistaPart"
-  );
+  const bonilistaIndex = sessionAttributes.bonilistaIndex;
+  const bonilistaPart = sessionAttributes.bonilistaPart;
   if (speechCache[bonilistaIndex].length > bonilistaPart) {
     sessionAttributes.bonilistaPart = bonilistaPart + 1;
   } else {
@@ -80,10 +74,13 @@ module.exports.getSpeechNewsletterPart = (handlerInput) => {
   }
 };
 
-module.exports.getSpeechNewsletter = (index) => {
+module.exports.getSpeechNewsletter = (index, handlerInput) => {
   if (index > 9) {
     return texts.helpText;
   } else if (speechCache[index]) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes.bonilistaPart = 0;
+    sessionAttributes.bonilistaIndex = index;
     return speechCache[index].content[0];
   }
 };
