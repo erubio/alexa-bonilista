@@ -4,19 +4,59 @@ const { JSDOM } = require("jsdom");
 const { FEED_URL } = require("../utils/constants");
 const texts = require("../../resources/texts");
 const parser = new xml2js.Parser({ attrkey: "type" });
+const alexaLimit = 7900;
+const endMargin = 50;
 
-const processContent = (entryContent) => {
-  const withoutHead = entryContent[0].replace(
+const splitContent = (content) => {
+  const splittedContent = [];
+  let splitIndex = 0;
+  let lastSplitIndex = 0;
+  do {
+    splitIndex =
+      content
+        .substring(lastSplitIndex, alexaLimit + lastSplitIndex)
+        .lastIndexOf(texts.pause) + lastSplitIndex;
+    splittedContent.push(content.substring(lastSplitIndex, splitIndex));
+    lastSplitIndex = splitIndex;
+  } while (content.length - splitIndex > endMargin);
+  return splittedContent;
+};
+
+const manageContentLimits = (content) => {
+  debugger;
+  if (content.length < alexaLimit) {
+    return [content];
+  } else {
+    return splitContent(content);
+  }
+};
+
+const removeHeadContent = content => {
+  return content.replace(
     /<head>(?:.|\n|\r|\s|\S)+?<\/head>/i,
     ""
+  )
+}
+
+const getArticleContent = content => {
+  const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
+  const emojiRegex = new RegExp(
+    "([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])",
+    "g"
   );
-  return JSDOM.fragment(withoutHead)
-    .textContent.replace(/\n+\s+/gi, texts.shortPause)
-    .replace(/^.*min\.\saprox\.<break time="1s" \/>/, "")
-    .replace(/© Ilustraci.*Bilbao./i, '')
-    .replace('#Bonilista', 'Bonilista')
-    .replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '')
-    .replace(/Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i, '');
+  const ilustrationRegex = new RegExp('© Ilustraci.*Bilbao.' , 'i');
+  const endRegex = new RegExp('Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+', 'i');
+  return JSDOM.fragment(removeHeadContent(content))
+    .textContent.replace(/\n+\s+/gi, texts.pause)
+    .replace(durationRegex, "")
+    .replace(ilustrationRegex, "")
+    .replace("#Bonilista", "Bonilista")
+    .replace(emojiRegex, "")
+    .replace(endRegex, "");
+}
+
+const processContent = (entryContent) => {
+  return manageContentLimits(getArticleContent(entryContent[0]));
 };
 
 const processFeed = (data) => {

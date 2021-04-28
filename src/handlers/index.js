@@ -59,6 +59,15 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
   }
 };
 
+const getNextPartResponse = (handlerInput) => {
+  return handlerInput.responseBuilder
+    .speak(speech.getSpeechNewsletterPart(handlerInput))
+    .reprompt(texts.sectionReprompt)
+    .withSimpleCard(texts.title, texts.helpTextCard)
+    .getResponse();
+};
+
+
 const getStopResponse = (handlerInput) =>
   handlerInput.responseBuilder
     .speak(texts.byeText)
@@ -84,6 +93,10 @@ module.exports.IntentRequestHandler = {
         return getBonilistaNewsletter(handlerInput);
       case "GetPrevBonilista":
         return getBonilistaNewsletterOneWeekAgo(handlerInput);
+      case "AMAZON.NoIntent":
+        return getHelpResponse(handlerInput);
+      case "AMAZON.YesIntent":
+        return getNextPartResponse(handlerInput);
       case "AMAZON.CancelIntent":
       case "AMAZON.StopIntent":
         return getStopResponse(handlerInput);
