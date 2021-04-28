@@ -57,31 +57,17 @@ module.exports.loadAndRefreshFeedCache = () => {
   setTimeout(() => console.log(speechCache), 10000);
 };
 
-module.exports.getSpeechNewsletterPart = (handlerInput) => {
-  const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-  const bonilistaIndex = sessionAttributes.bonilistaIndex;
-  const bonilistaPart = sessionAttributes.bonilistaPart;
-  if (speechCache[bonilistaIndex].length > bonilistaPart) {
-    sessionAttributes.bonilistaPart = bonilistaPart + 1;
-  } else {
-    sessionAttributes.bonilistaPart = null;
-    sessionAttributes.bonilistaIndex = null;
-  }
-  if (bonilistaIndex > -1 && bonilistaPart > -1) {
+module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
+  if (speechCache[bonilistaIndex] && speechCache[bonilistaIndex].content[bonilistaPart]) {
     return speechCache[bonilistaIndex].content[bonilistaPart];
-  } else {
-    return texts.helpText;
   }
 };
 
-module.exports.getSpeechNewsletter = (index, handlerInput) => {
+module.exports.getSpeechNewsletter = (bonilistaIndex) => {
   if (index > 9) {
     return texts.helpText;
   } else if (speechCache[index]) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    sessionAttributes.bonilistaPart = 0;
-    sessionAttributes.bonilistaIndex = index;
-    return speechCache[index].content[0];
+    return speechCache[bonilistaIndex].content[0];
   }
 };
 

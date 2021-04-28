@@ -26,17 +26,32 @@ module.exports.ErrorHandler = {
   },
 };
 
+const saveSessionInfo = (handlerInput, bonilistaIndex, bonilistaPart = 0) => {
+  const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+  sessionAttributes.bonilistaPart = bonilistaPart;
+  sessionAttributes.bonilistaIndex = bonilistaIndex;
+  handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+}
+
+const retrieveSessionInfo = (handlerInput) => {
+  return handlerInput.attributesManager.getSessionAttributes();
+}
+
 const getBonilistaNewsletter = (handlerInput) => {
+  const bonilistaIndex = 0;
+  saveSessionInfo(handlerInput, bonilistaIndex);
   return handlerInput.responseBuilder
-    .speak(speech.getSpeechNewsletter(0), handlerInput)
+    .speak(speech.getSpeechNewsletter(bonilistaIndex))
     .reprompt(texts.sectionReprompt)
     .withSimpleCard(texts.title, texts.helpTextCard)
     .getResponse();
 };
 
 const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
+  const bonilistaIndex = 1;
+  saveSessionInfo(handlerInput, bonilistaIndex);
   return handlerInput.responseBuilder
-    .speak(speech.getSpeechNewsletter(1), handlerInput)
+    .speak(speech.getSpeechNewsletter(bonilistaIndex))
     .reprompt(texts.sectionReprompt)
     .withSimpleCard(texts.title, texts.helpTextCard)
     .getResponse();
@@ -49,6 +64,7 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
     handlerInput.requestEnvelope.request.intent.slots.WeeksAgo.value;
 
   if (weeksAgo) {
+    saveSessionInfo(handlerInput, weeksAgo || 0);
     return handlerInput.responseBuilder
       .speak(speech.getSpeechNewsletter(weeksAgo || 0), handlerInput)
       .reprompt(texts.sectionReprompt)
@@ -60,11 +76,21 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
 };
 
 const getNextPartResponse = (handlerInput) => {
-  return handlerInput.responseBuilder
-    .speak(speech.getSpeechNewsletterPart(handlerInput))
-    .reprompt(texts.sectionReprompt)
-    .withSimpleCard(texts.title, texts.helpTextCard)
-    .getResponse();
+  const {bonilistaIndex, bonilistaPart} = retrieveSessionInfo(handlerInput);
+  const currentPart = bonilistaPart + 1
+  const currentSpeech = speech.getSpeechNewsletterPart(bonilistaIndex, currentPart)
+  
+  if (currentSpeech) {
+    saveSessionInfo(handlerInput, bonilistaIndex, currentPart);
+    return handlerInput.responseBuilder
+      .speak(currentSpeech)
+      .reprompt(texts.sectionReprompt)
+      .withSimpleCard(texts.title, texts.helpTextCard)
+      .getResponse();
+  } else {
+    saveSessionInfo(handlerInput, null, null);
+    getHelpResponse(handlerInput);
+  }
 };
 
 
