@@ -12,8 +12,7 @@ const generateFeedSpeach = (info) => {
         processedSpeach.push(
           `${info.title}${texts.longPause}${content}${texts.longPause}${texts.askContinue}`
         );
-      }
-      if (index < info.content.length - 1) {
+      } else if (index < info.content.length - 1) {
         processedSpeach.push(
           `${content}${texts.longPause}${texts.askContinue}`
         );
@@ -54,19 +53,19 @@ const getTextTitleByWeek = (i, title) => {
 module.exports.loadAndRefreshFeedCache = () => {
   getFeed().then((feed) => cacheFeeds(feed));
   setInterval(() => getFeed().then((feeds) => cacheFeeds(feeds)), CACHE_TIME);
-  setTimeout(() => console.log(speechCache), 10000);
 };
 
 module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
   if (speechCache[bonilistaIndex] && speechCache[bonilistaIndex].content[bonilistaPart]) {
     return speechCache[bonilistaIndex].content[bonilistaPart];
   }
+  return null;
 };
 
 module.exports.getSpeechNewsletter = (bonilistaIndex) => {
-  if (index > 9) {
+  if (bonilistaIndex > 9) {
     return texts.helpText;
-  } else if (speechCache[index]) {
+  } else if (speechCache[bonilistaIndex]) {
     return speechCache[bonilistaIndex].content[0];
   }
 };

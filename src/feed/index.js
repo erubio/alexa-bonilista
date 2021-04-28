@@ -4,7 +4,7 @@ const { JSDOM } = require("jsdom");
 const { FEED_URL } = require("../utils/constants");
 const texts = require("../../resources/texts");
 const parser = new xml2js.Parser({ attrkey: "type" });
-const alexaLimit = 7900;
+const alexaLimit = 5500;
 const endMargin = 50;
 
 const splitContent = (content) => {
@@ -23,7 +23,6 @@ const splitContent = (content) => {
 };
 
 const manageContentLimits = (content) => {
-  debugger;
   if (content.length < alexaLimit) {
     return [content];
   } else {
