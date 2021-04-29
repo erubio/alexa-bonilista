@@ -12,6 +12,7 @@ module.exports = {
     sectionReprompt: 'Puedes pedirme las bonilistas de las últimas 10 semanas, por ejemplo Leeme la última bonilista, o la bonilista de hace 2 semanas.',
     shortPause: '<break time="1s" />',
     title: 'La bonilista',
+    titles: 'Aquí tienes los últimos títulos:',
     titleThisWeek: 'Esta semana tenemos.',
     titleLastWeek: 'Hace una semana tuvimos.',
     titleNWweeks: 'Hace {n} semanas tuvimos.',
