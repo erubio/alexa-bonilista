@@ -31,11 +31,11 @@ const saveSessionInfo = (handlerInput, bonilistaIndex, bonilistaPart = 0) => {
   sessionAttributes.bonilistaPart = bonilistaPart;
   sessionAttributes.bonilistaIndex = bonilistaIndex;
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-}
+};
 
 const retrieveSessionInfo = (handlerInput) => {
   return handlerInput.attributesManager.getSessionAttributes();
-}
+};
 
 const getBonilistaNewsletter = (handlerInput) => {
   const bonilistaIndex = 0;
@@ -76,10 +76,13 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
 };
 
 const getNextPartResponse = (handlerInput) => {
-  const {bonilistaIndex, bonilistaPart} = retrieveSessionInfo(handlerInput);
-  const currentPart = bonilistaPart + 1
-  const currentSpeech = speech.getSpeechNewsletterPart(bonilistaIndex, currentPart)
-  
+  const { bonilistaIndex, bonilistaPart } = retrieveSessionInfo(handlerInput);
+  const currentPart = bonilistaPart + 1;
+  const currentSpeech = speech.getSpeechNewsletterPart(
+    bonilistaIndex,
+    currentPart
+  );
+
   if (currentSpeech) {
     saveSessionInfo(handlerInput, bonilistaIndex, currentPart);
     return handlerInput.responseBuilder
@@ -92,7 +95,6 @@ const getNextPartResponse = (handlerInput) => {
     getHelpResponse(handlerInput);
   }
 };
-
 
 const getStopResponse = (handlerInput) =>
   handlerInput.responseBuilder

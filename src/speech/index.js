@@ -56,7 +56,11 @@ module.exports.loadAndRefreshFeedCache = () => {
 };
 
 module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
-  if (speechCache[bonilistaIndex] && speechCache[bonilistaIndex].content[bonilistaPart]) {
+  if (
+    speechCache[bonilistaIndex] &&
+    speechCache[bonilistaIndex].content &&
+    speechCache[bonilistaIndex].content[bonilistaPart]
+  ) {
     return speechCache[bonilistaIndex].content[bonilistaPart];
   }
   return null;
