@@ -92,9 +92,16 @@ const getNextPartResponse = (handlerInput) => {
       .getResponse();
   } else {
     saveSessionInfo(handlerInput, null, null);
-    getHelpResponse(handlerInput);
+    return getHelpResponse(handlerInput);
   }
 };
+
+const getBonilistaTitles = (handlerInput) =>
+handlerInput.responseBuilder
+  .speak(speech.getSpeechNewsletterTitles())
+  .reprompt(texts.sectionReprompt)
+  .withSimpleCard(texts.title, texts.helpTextCard)
+  .getResponse();
 
 const getStopResponse = (handlerInput) =>
   handlerInput.responseBuilder
@@ -125,6 +132,8 @@ module.exports.IntentRequestHandler = {
         return getHelpResponse(handlerInput);
       case "AMAZON.YesIntent":
         return getNextPartResponse(handlerInput);
+      case "GetBonilistaTitles":
+        return getBonilistaTitles(handlerInput);
       case "AMAZON.CancelIntent":
       case "AMAZON.StopIntent":
         return getStopResponse(handlerInput);
