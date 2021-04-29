@@ -30,27 +30,27 @@ const manageContentLimits = (content) => {
   }
 };
 
-const removeHeadContent = content => {
-  return content.replace(
-    /<head>(?:.|\n|\r|\s|\S)+?<\/head>/i,
-    ""
-  )
-}
+const removeHeadContent = (content) => {
+  return content.replace(/<head>(?:.|\n|\r|\s|\S)+?<\/head>/i, "");
+};
 
-const getArticleContent = content => {
-  const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
+const removeEmojis = (content)  => {
   const emojiRegex = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
+  return content.replace(emojiRegex, '');
+};
+
+const getArticleContent = (content) => {
+  const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
   const ilustrationRegex = /© Ilustraci.*Bilbao/i;
   const endRegex = /Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i;
-  return JSDOM.fragment(removeHeadContent(content))
+  return JSDOM.fragment(removeEmojis(removeHeadContent(content)))
     .textContent.replace(/\n+\s+/gi, texts.pause)
     .replace(durationRegex, "")
     .replace(ilustrationRegex, "")
     .replace("#Bonilista", "Bonilista")
     .replace(/&/g, "and")
-    .replace(emojiRegex, "")
     .replace(endRegex, "");
-}
+};
 
 const processContent = (entryContent) => {
   return manageContentLimits(getArticleContent(entryContent[0]));
@@ -62,7 +62,8 @@ const processFeed = (data) => {
     return {
       content: processContent(entry["content:encoded"]),
       releaseDate: entry.pubDate,
-      title: entry.title,
+      title: removeEmojis(entry.title[0])
+        .replace("#Bonilista", "Bonilista")
     };
   });
 };
