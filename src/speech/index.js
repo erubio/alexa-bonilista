@@ -8,13 +8,14 @@ const generateFeedSpeach = (info) => {
   const processedSpeach = [];
   info.content.forEach((content, index) => {
     if (info.content.length > 1) {
+      const randomContinue = parseInt(Math.random() * 5);
       if (index === 0) {
         processedSpeach.push(
-          `${info.title}${texts.longPause}${content}${texts.longPause}${texts.askContinue}`
+          `${info.title}${texts.longPause}${content}${texts.longPause}${texts['askContinue' + randomContinue]}`
         );
       } else if (index < info.content.length - 1) {
         processedSpeach.push(
-          `${content}${texts.longPause}${texts.askContinue}`
+          `${content}${texts.longPause}${texts['askContinue' + randomContinue]}`
         );
       } else {
         processedSpeach.push(
@@ -53,6 +54,7 @@ const getTextTitleByWeek = (i, title) => {
 module.exports.loadAndRefreshFeedCache = () => {
   getFeed().then((feed) => cacheFeeds(feed));
   setInterval(() => getFeed().then((feeds) => cacheFeeds(feeds)), CACHE_TIME);
+  setTimeout(() => console.log(speechCache), 10000)
 };
 
 module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {

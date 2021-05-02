@@ -61,12 +61,12 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
   const weeksAgo =
     handlerInput.requestEnvelope.request.intent.slots &&
     handlerInput.requestEnvelope.request.intent.slots.WeeksAgo &&
-    handlerInput.requestEnvelope.request.intent.slots.WeeksAgo.value;
+    handlerInput.requestEnvelope.request.intent.slots.WeeksAgo.value || 1;
 
   if (weeksAgo) {
-    saveSessionInfo(handlerInput, weeksAgo || 0);
+    saveSessionInfo(handlerInput, weeksAgo);
     return handlerInput.responseBuilder
-      .speak(speech.getSpeechNewsletter(weeksAgo || 0), handlerInput)
+      .speak(speech.getSpeechNewsletter(weeksAgo))
       .reprompt(texts.sectionReprompt)
       .withSimpleCard(texts.title, texts.helpTextCard)
       .getResponse();
