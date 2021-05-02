@@ -43,18 +43,17 @@ const cacheFeeds = (feed) => {
 
 const getTextTitleByWeek = (i, title) => {
   if (i === 0) {
-    return `${texts.titleThisWeek} ${title}`;
+    return `${texts.titleThisWeek} ${title}.`;
   } else if (i === 1) {
-    return `${texts.titleLastWeek} ${title}`;
+    return `${texts.titleLastWeek} ${title}.`;
   } else {
-    return `${texts.titleNWweeks.replace("{n}", i)} ${title}`;
+    return `${texts.titleNWweeks.replace("{n}", i)} ${title}.`;
   }
 };
 
 module.exports.loadAndRefreshFeedCache = () => {
   getFeed().then((feed) => cacheFeeds(feed));
   setInterval(() => getFeed().then((feeds) => cacheFeeds(feeds)), CACHE_TIME);
-  setTimeout(() => console.log(speechCache), 10000)
 };
 
 module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
