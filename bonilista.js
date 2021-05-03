@@ -18,8 +18,15 @@ skillBuilder
   )
   .addErrorHandlers(handlers.ErrorHandler);
 
-speech.loadAndRefreshFeedCache();
+speech.loadFeedCache();
 
 app.post("/", adapter.getRequestHandlers());
+app.get("/refreshcache", (req,res) => {
+  if(req.socket.localAddress === req.socket.remoteAddress) {//only from local connection 
+    speech.loadFeedCache();
+    return res.status(201).send();
+  }
+  return res.status(403).send();
+});
 
 app.listen(PORT);

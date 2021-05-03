@@ -51,9 +51,8 @@ const getTextTitleByWeek = (i, title) => {
   }
 };
 
-module.exports.loadAndRefreshFeedCache = () => {
+module.exports.loadFeedCache = () => {
   getFeed().then((feed) => cacheFeeds(feed));
-  setInterval(() => getFeed().then((feeds) => cacheFeeds(feeds)), CACHE_TIME);
 };
 
 module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
