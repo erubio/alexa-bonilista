@@ -22,7 +22,7 @@ speech.loadFeedCache();
 
 app.post("/", adapter.getRequestHandlers());
 app.get("/refreshcache", (req,res) => {
-  if(req.socket.localAddress === req.socket.remoteAddress) {//only from local connection 
+  if(/localhost/i.test(req.headers.host)) {//only from local connection 
     speech.loadFeedCache();
     return res.status(201).send();
   }
