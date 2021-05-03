@@ -29,4 +29,9 @@ app.get("/refreshcache", (req,res) => {
   return res.status(403).send();
 });
 
+app.get(/.*/, (req,res) => res.status(404).send());
+app.post(/.*/, (req,res) => res.status(404).send());
+app.put(/.*/, (req,res) => res.status(404).send());
+app.delete(/.*/, (req,res) => res.status(404).send());
+
 app.listen(PORT);
