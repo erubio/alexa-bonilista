@@ -2,7 +2,6 @@ const texts = require("../../resources/texts");
 const { getFeed } = require("../feed");
 
 let speechCache = [];
-const CACHE_TIME = 12 * 60 * 60 * 1000; //12 hour
 
 const generateFeedSpeach = (info) => {
   const processedSpeach = [];
@@ -78,7 +77,7 @@ module.exports.getSpeechNewsletterTitles = () => {
   const titles = speechCache.map((entry, i) =>
     getTextTitleByWeek(i, entry.title)
   );
-  return `${texts.titles}${texts.pause}${titles.join(texts.longPause)}`;
+  return `${texts.titles}${texts.pause}${titles.join(texts.pause)}${texts.titlesEnd}`;
 };
 
 module.exports.getSpeechNewsletterTest = (req, res) => {

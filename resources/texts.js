@@ -20,6 +20,7 @@ module.exports = {
     titleThisWeek: 'Esta semana tenemos.',
     titleLastWeek: 'Hace una semana tuvimos.',
     titleNWweeks: 'Hace {n} semanas tuvimos.',
+    titlesEnd: '¿Cúal quieres escuchar?',
     welcomeText: 'Te damos la bienvenida a la Bonilista; ¡Camarada del metal!. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas; puedes decir, leeme la bonilista de hace 3 semanas. O, leeme la bonilista de la última semana. Si no sabes cual es la que te interesa, te puedo decir también los títulos de las bonilistas disponibles. ¿Qué prefieres?',
     welcomeTextCard: 'Te damos la bienvenida a la Bonilista; ¡Camarada del metal!. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas; puedes decir, leeme la bonilista de hace 3 semanas, o leeme la bonilista de la última semana. Si no sabes cual es la que te interesa, te puedo decir también los títulos de las bonilistas disponibles. ¿Qué prefieres?'
 }
