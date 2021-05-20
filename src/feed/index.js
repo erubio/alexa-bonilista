@@ -1,6 +1,4 @@
 const fetch = require("node-fetch");
-const LanguageDetect = require("languagedetect");
-const lngDetector = new LanguageDetect();
 const xml2js = require("xml2js");
 const { JSDOM } = require("jsdom");
 const { FEED_URL } = require("../utils/constants");
@@ -41,34 +39,11 @@ const removeEmojis = (content) => {
   return content.replace(emojiRegex, "");
 };
 
-const addEngLangTags = (content) => {
-  const quotes = content.match(/(&laquo;|«)([^»]*)(&raquo;|»)/gi);
-  let processedContent = content;
-  if (quotes && quotes.length > 1) {
-    quotes.forEach((quote) => {
-      const langDetected = lngDetector.detect(quote)[0][0];
-      const langPercent = lngDetector.detect(quote)[0][1];
-      if (
-        (langDetected === "english" || langDetected === "dutch") &&
-        langPercent > 0.21
-      ) {
-        processedContent = content.replace(
-          quote,
-          `<lang xml:lang="en-US">${quote}</lang>`
-        );
-      }
-    });
-  }
-  return processedContent;
-};
-
 const getArticleContent = (content) => {
   const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
   const ilustrationRegex = /© Ilustraci.*Bilbao/i;
   const endRegex = /Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i;
-  return addEngLangTags(
-    JSDOM.fragment(removeEmojis(removeHeadContent(content))).textContent
-  )
+  return JSDOM.fragment(removeEmojis(removeHeadContent(content))).textContent
     .replace(/\n+\s+/gi, texts.pause)
     .replace(durationRegex, "")
     .replace(ilustrationRegex, "")
@@ -87,7 +62,7 @@ const processFeed = (data) => {
     return {
       content: processContent(entry["content:encoded"]),
       releaseDate: entry.pubDate,
-      title: addEngLangTags(removeEmojis(entry.title[0]).replace("#Bonilista", "Bonilista")),
+      title: removeEmojis(entry.title[0]).replace("#Bonilista", "Bonilista"),
     };
   });
 };

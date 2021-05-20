@@ -1,29 +1,54 @@
+const LanguageDetect = require("languagedetect");
+const lngDetector = new LanguageDetect();
 const texts = require("../../resources/texts");
 const { getFeed } = require("../feed");
 
 let speechCache = [];
 
+const addEngLangTags = (content) => {
+  const quotes = content.match(/(«)([^»]*)(»)/gi);
+  let processedContent = content;
+  if (quotes && quotes.length > 0) {
+    quotes.forEach((quote) => {
+      const langDetected = lngDetector.detect(quote)[0][0];
+      const langPercent = lngDetector.detect(quote)[0][1];
+      if (
+        (langDetected === "english" || langDetected === "dutch") &&
+        langPercent > 0.21
+      ) {
+        processedContent = content.replace(
+          quote,
+          `<lang xml:lang="en-US">${quote}</lang>`
+        );
+      }
+    });
+  }
+  return processedContent;
+};
+
 const generateFeedSpeach = (info) => {
   const processedSpeach = [];
   info.content.forEach((content, index) => {
+    const title = addEngLangTags(info.title);
     if (info.content.length > 1) {
       const randomContinue = parseInt(Math.random() * 5);
+      const processedContent = addEngLangTags(content);
       if (index === 0) {
         processedSpeach.push(
-          `${info.title}${texts.longPause}${content}${texts.longPause}${texts['askContinue' + randomContinue]}`
+          `${title}${texts.longPause}${processedContent}${texts.longPause}${texts['askContinue' + randomContinue]}`
         );
       } else if (index < info.content.length - 1) {
         processedSpeach.push(
-          `${content}${texts.longPause}${texts['askContinue' + randomContinue]}`
+          `${processedContent}${texts.longPause}${texts['askContinue' + randomContinue]}`
         );
       } else {
         processedSpeach.push(
-          `${content}${texts.longPause}${texts.endBonilista}`
+          `${processedContent}${texts.longPause}${texts.endBonilista}`
         );
       }
     } else {
       processedSpeach.push(
-        `${info.title}${texts.longPause}${info.content}${texts.longPause}${texts.endBonilista}`
+        `${title}${texts.longPause}${addEngLangTags(info.content[0])}${texts.longPause}${texts.endBonilista}`
       );
     }
   });
