@@ -104,7 +104,7 @@ module.exports.getSpeechNewsletterTitles = () => {
   const titles = speechCache.map((entry, i) =>
     getTextTitleByWeek(i, entry.title)
   );
-  return `${texts.titles}${texts.pause}${titles.join(texts.pause)}${texts.titlesEnd}`;
+  return `${texts.titles}${texts.pause}${addEngLangTags(titles.join(texts.pause))}${texts.titlesEnd}`;
 };
 
 module.exports.getSpeechNewsletterTest = (req, res) => {
