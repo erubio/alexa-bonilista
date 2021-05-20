@@ -1,4 +1,6 @@
 const fetch = require("node-fetch");
+const LanguageDetect = require("languagedetect");
+const lngDetector = new LanguageDetect();
 const xml2js = require("xml2js");
 const { JSDOM } = require("jsdom");
 const { FEED_URL } = require("../utils/constants");
@@ -34,17 +36,40 @@ const removeHeadContent = (content) => {
   return content.replace(/<head>(?:.|\n|\r|\s|\S)+?<\/head>/i, "");
 };
 
-const removeEmojis = (content)  => {
+const removeEmojis = (content) => {
   const emojiRegex = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g;
-  return content.replace(emojiRegex, '');
+  return content.replace(emojiRegex, "");
+};
+
+const addEngLangTags = (content) => {
+  const quotes = content.match(/(&laquo;|«)([^»]*)(&raquo;|»)/gi);
+  if (quotes && quotes.length > 1) {
+    quotes.forEach((quote) => {
+      const langDetected = lngDetector.detect(quote)[0][0];
+      const langPercent = lngDetector.detect(quote)[0][1];
+      if (
+        (langDetected === "english" || langDetected === "dutch") &&
+        langPercent > 0.21
+      ) {
+        return content.replace(
+          quote,
+          `<lang xml:lang="en-US">${quote}</lang>`
+        );
+      } else {
+        return content;
+      }
+    });
+  }
 };
 
 const getArticleContent = (content) => {
   const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
   const ilustrationRegex = /© Ilustraci.*Bilbao/i;
   const endRegex = /Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i;
-  return JSDOM.fragment(removeEmojis(removeHeadContent(content)))
-    .textContent.replace(/\n+\s+/gi, texts.pause)
+  return addEngLangTags(
+    JSDOM.fragment(removeEmojis(removeHeadContent(content))).textContent
+  )
+    .replace(/\n+\s+/gi, texts.pause)
     .replace(durationRegex, "")
     .replace(ilustrationRegex, "")
     .replace("#Bonilista", "Bonilista")
@@ -62,8 +87,7 @@ const processFeed = (data) => {
     return {
       content: processContent(entry["content:encoded"]),
       releaseDate: entry.pubDate,
-      title: removeEmojis(entry.title[0])
-        .replace("#Bonilista", "Bonilista")
+      title: addEngLangTags(removeEmojis(entry.title[0]).replace("#Bonilista", "Bonilista")),
     };
   });
 };
