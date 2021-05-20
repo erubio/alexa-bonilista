@@ -43,6 +43,7 @@ const removeEmojis = (content) => {
 
 const addEngLangTags = (content) => {
   const quotes = content.match(/(&laquo;|«)([^»]*)(&raquo;|»)/gi);
+  let processedContent = content;
   if (quotes && quotes.length > 1) {
     quotes.forEach((quote) => {
       const langDetected = lngDetector.detect(quote)[0][0];
@@ -51,15 +52,14 @@ const addEngLangTags = (content) => {
         (langDetected === "english" || langDetected === "dutch") &&
         langPercent > 0.21
       ) {
-        return content.replace(
+        processedContent = content.replace(
           quote,
           `<lang xml:lang="en-US">${quote}</lang>`
         );
-      } else {
-        return content;
       }
     });
   }
+  return processedContent;
 };
 
 const getArticleContent = (content) => {
