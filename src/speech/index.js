@@ -66,7 +66,9 @@ module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
 };
 
 module.exports.getSpeechNewsletter = (bonilistaIndex) => {
-  if (bonilistaIndex > 9) {
+  if (bonilistaIndex === 10) {
+    return texts.helpTenWeeksAgo;
+  } else if (bonilistaIndex > 10) {
     return texts.helpText;
   } else if (speechCache[bonilistaIndex]) {
     return speechCache[bonilistaIndex].content[0];
