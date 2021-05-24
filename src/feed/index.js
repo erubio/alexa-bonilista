@@ -4,7 +4,7 @@ const { JSDOM } = require("jsdom");
 const { FEED_URL } = require("../utils/constants");
 const texts = require("../../resources/texts");
 const parser = new xml2js.Parser({ attrkey: "type" });
-const alexaLimit = 5500;
+const alexaLimit = 6000;
 const endMargin = 50;
 
 const splitContent = (content) => {

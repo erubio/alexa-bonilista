@@ -1,5 +1,6 @@
 const texts = require("../../resources/texts");
 const speech = require("../speech");
+const speechCache = require("../speech/cache");
 
 module.exports.LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -29,7 +30,9 @@ module.exports.ErrorHandler = {
 const saveSessionInfo = (handlerInput, bonilistaIndex, bonilistaPart = 0) => {
   const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
   sessionAttributes.bonilistaPart = bonilistaPart;
-  sessionAttributes.bonilistaIndex = bonilistaIndex;
+  //save release date in order to avoid problems on refresh data.
+  sessionAttributes.bonilistaReleaseDate =
+    speechCache.getSpeechCache[bonilistaIndex].releaseDate;
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 };
 
@@ -59,9 +62,10 @@ const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
 
 const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
   const weeksAgo =
-    handlerInput.requestEnvelope.request.intent.slots &&
-    handlerInput.requestEnvelope.request.intent.slots.WeeksAgo &&
-    handlerInput.requestEnvelope.request.intent.slots.WeeksAgo.value || 1;
+    (handlerInput.requestEnvelope.request.intent.slots &&
+      handlerInput.requestEnvelope.request.intent.slots.WeeksAgo &&
+      handlerInput.requestEnvelope.request.intent.slots.WeeksAgo.value) ||
+    1;
 
   if (weeksAgo) {
     saveSessionInfo(handlerInput, weeksAgo);
@@ -76,7 +80,13 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
 };
 
 const getNextPartResponse = (handlerInput) => {
-  const { bonilistaIndex, bonilistaPart } = retrieveSessionInfo(handlerInput);
+  const { bonilistaReleaseDate, bonilistaPart } = retrieveSessionInfo(handlerInput);
+  const bonilistaIndex = speechCache.getSpeechCache.find(entry => entry.releaseDate === releaseDate);
+  if (!bonilistaIndex) {
+    saveSessionInfo(handlerInput, null, null);
+    return getHelpResponse(handlerInput);
+  }
+
   const currentPart = bonilistaPart + 1;
   const currentSpeech = speech.getSpeechNewsletterPart(
     bonilistaIndex,
@@ -84,7 +94,7 @@ const getNextPartResponse = (handlerInput) => {
   );
 
   if (currentSpeech) {
-    saveSessionInfo(handlerInput, bonilistaIndex, currentPart);
+    saveSessionInfo(handlerInput, bonilistaReleaseDate, currentPart);
     return handlerInput.responseBuilder
       .speak(currentSpeech)
       .reprompt(texts.sectionReprompt)
@@ -97,11 +107,11 @@ const getNextPartResponse = (handlerInput) => {
 };
 
 const getBonilistaTitles = (handlerInput) =>
-handlerInput.responseBuilder
-  .speak(speech.getSpeechNewsletterTitles())
-  .reprompt(texts.sectionReprompt)
-  .withSimpleCard(texts.title, texts.helpTextCard)
-  .getResponse();
+  handlerInput.responseBuilder
+    .speak(speech.getSpeechNewsletterTitles())
+    .reprompt(texts.sectionReprompt)
+    .withSimpleCard(texts.title, texts.helpTextCard)
+    .getResponse();
 
 const getStopResponse = (handlerInput) =>
   handlerInput.responseBuilder
