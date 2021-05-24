@@ -32,7 +32,7 @@ const saveSessionInfo = (handlerInput, bonilistaIndex, bonilistaPart = 0) => {
   sessionAttributes.bonilistaPart = bonilistaPart;
   //save release date in order to avoid problems on refresh data.
   sessionAttributes.bonilistaReleaseDate =
-    speechCache.getSpeechCache[bonilistaIndex].releaseDate;
+    speechCache.getReleaseDateOfBonilista(bonilistaIndex);
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 };
 
