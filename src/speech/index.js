@@ -9,8 +9,8 @@ module.exports.getSpeechNewsletter = (bonilistaIndex) => {
     return texts.helpTenWeeksAgo;
   } else if (bonilistaIndex > 10) {
     return texts.helpText;
-  } else if (speechCache[bonilistaIndex]) {
-    return speechCache.getSpeechContent(bonilistaIndex, 0);
+  } else {
+    return speechCache.getSpeechContent(bonilistaIndex, 0) || texts.helpText;
   }
 };
 
