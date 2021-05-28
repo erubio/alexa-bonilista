@@ -8,13 +8,13 @@ module.exports = {
     endBonilista: 'Hasta aquí la bonilista, si te apetece puedes pedirme que te lea otra entrega.',
     error: 'Ups! Vaya! La hemos liado un poco y ahora no te podemos ofrecer las últimas noticias, lo estamos arreglando, pregúntame dentro de un rato a ver si ya hemos encotrado el problema.',
     errorText: 'Perdona, creo que estaba un poco despistada y no te he entendido, puedes repetirlo otra vez?',
-    helpText: 'Recuerda que puedes pedirme las bonilistas de las últimas 10 semanas, por ejemplo, Léeme la última bonilista. O, léeme la bonilista de hace 2 semanas. Si no sabes cual es la que te interesa, me puedes pedir los títulos de las bonilistas disponibles.', 
-    helpTextCard: 'Recuerda que puedes pedirme las bonilistas de las últimas 10 semanas, por ejemplo Léeme la última bonilista, o la bonilista de hace 2 semanas. Si no sabes cual es la que te interesa, me puedes pedir los títulos de las bonilistas disponibles.', 
-    helpTenWeeksAgo: 'Recuerda que puedes pedirme las bonilistas de las últimas 10 semanas, es decir de la semana actual hasta hace 9 semanas...',
+    helpText: 'Recuerda que puedes pedirme las bonilistas de las últimas {nWeeks} semanas, por ejemplo, Léeme la última bonilista. O, léeme la bonilista de hace 2 semanas. Si no sabes cual es la que te interesa, me puedes pedir los títulos de las bonilistas disponibles.', 
+    helpTextCard: 'Recuerda que puedes pedirme las bonilistas de las últimas {nWeeks} semanas, por ejemplo Léeme la última bonilista, o la bonilista de hace 2 semanas. Si no sabes cual es la que te interesa, me puedes pedir los títulos de las bonilistas disponibles.', 
+    helpMaxWeeksAgo: 'Recuerda que puedes pedirme las bonilistas de las últimas {nWeeks} semanas, es decir de la semana actual hasta hace 9 semanas...',
     longPause: '<break time="2s" />',
     of: 'de',
     pause: '<break time="1.5s" />',
-    sectionReprompt: 'Puedes pedirme las bonilistas de las últimas 10 semanas, por ejemplo Léeme la última bonilista, o la bonilista de hace 2 semanas.',
+    sectionReprompt: 'Puedes pedirme las bonilistas de las últimas {nWeeks} semanas, por ejemplo Léeme la última bonilista, o la bonilista de hace 2 semanas.',
     shortPause: '<break time="1s" />',
     title: 'La bonilista',
     titles: 'Aquí tienes los últimos títulos:',
@@ -22,6 +22,5 @@ module.exports = {
     titleLastWeek: 'Hace una semana tuvimos.',
     titleNWweeks: 'Hace {n} semanas tuvimos.',
     titlesEnd: '¿Cúal quieres escuchar?',
-    welcomeText: 'Te damos la bienvenida a la Bonilista; ¡Camarada del metal!. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas; puedes decir, léeme la bonilista de hace 3 semanas. O, léeme la bonilista de la última semana. Si no sabes cual es la que te interesa, te puedo decir también los títulos de las bonilistas disponibles. ¿Qué prefieres?',
-    welcomeTextCard: 'Te damos la bienvenida a la Bonilista; ¡Camarada del metal!. Me puedes pedir que te lea las bonilistas de las últimas 10 semanas; puedes decir, léeme la bonilista de hace 3 semanas, o léeme la bonilista de la última semana. Si no sabes cual es la que te interesa, te puedo decir también los títulos de las bonilistas disponibles. ¿Qué prefieres?'
+    welcomeText: 'Te damos la bienvenida a la Bonilista; ¡Camarada del metal!. Me puedes pedir que te lea las bonilistas de las últimas {nWeeks} semanas; puedes decir, léeme la bonilista de hace 3 semanas. O, léeme la bonilista de la última semana. Si no sabes cual es la que te interesa, te puedo decir también los títulos de las bonilistas disponibles. ¿Qué prefieres?'
 }

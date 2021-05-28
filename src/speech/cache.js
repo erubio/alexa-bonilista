@@ -2,7 +2,14 @@ const LanguageDetect = require("languagedetect");
 const lngDetector = new LanguageDetect();
 const { getFeed } = require("../feed");
 const texts = require("../../resources/texts");
-let speechCache = { articles: [], titles: "" };
+const speechCache = {
+  articles: [],
+  titles: "",
+  welcomeMessage: "",
+  helpText: "",
+  helpTextCard: "",
+  helpMaxWeeksAgo: ""
+};
 
 const addEngLangTags = (content) => {
   const quotes = content.match(/(«)([^»]*)(»)/gi);
@@ -73,11 +80,20 @@ const processTitles = (feed) => {
   return feed.map((f, i) => getTextTitleByWeek(addEngLangTags(f.title), i));
 };
 
-const cacheFeed = (feed) => {
+const setWeeksToText = (text) => {
+  return text.replace("{nWeeks}", speechCache.articles.length);
+};
+
+
+const generateAndSaveSpeeches = (feed) => {
   speechCache.articles = processArticles(feed);
   speechCache.titles = `${texts.titles}${texts.pause}${processTitles(feed).join(
     texts.pause
   )}${texts.titlesEnd}`;
+  speechCache.welcomeMessage = setWeeksToText(texts.welcomeText)
+  speechCache.helpText = setWeeksToText(texts.helpText);
+  speechCache.helpTextCard = setWeeksToText(texts.helpTextCard);
+  speechCache.helpMaxWeeksAgo = setWeeksToText(texts.helpMaxWeeksAgo);
 };
 
 const getTextTitleByWeek = (title, i) => {
@@ -91,20 +107,9 @@ const getTextTitleByWeek = (title, i) => {
 };
 
 module.exports.loadFeed = () => {
-  getFeed().then((feed) => cacheFeed(feed));
+  getFeed().then((feed) => generateAndSaveSpeeches(feed));
 };
 
-module.exports.getSpeechContent = (bonilistaIndex = 0, bonilistaPart = 0) => {
-  if (
-    speechCache.articles[bonilistaIndex] &&
-    speechCache.articles[bonilistaIndex].content &&
-    speechCache.articles[bonilistaIndex].content[bonilistaPart]
-  ) {
-    return speechCache.articles[bonilistaIndex].content[bonilistaPart];
-  }
-  return null;
-};
-
-module.exports.getSpeechTitles = () => {
-  return speechCache.titles;
+module.exports.getSpeechCache = () => {
+  return speechCache;
 };

@@ -43,8 +43,8 @@ const getArticleContent = (content) => {
   const durationRegex = /^.*min\.\saprox\.<break time="[0-9]\.*[0-9]*s" \/>/i;
   const ilustrationRegex = /© Ilustraci.*Bilbao/i;
   const endRegex = /Tu\s+MARCA\s+aquí.(?:.|\n|\r|\s|\S)+/i;
-  return JSDOM.fragment(removeEmojis(removeHeadContent(content))).textContent
-    .replace(/\n+\s+/gi, texts.pause)
+  return JSDOM.fragment(removeEmojis(removeHeadContent(content)))
+    .textContent.replace(/\n+\s+/gi, texts.pause)
     .replace(durationRegex, "")
     .replace(ilustrationRegex, "")
     .replace("#Bonilista", "Bonilista")
@@ -57,7 +57,9 @@ const processContent = (entryContent) => {
 };
 
 const processFeed = (data) => {
-  const entries = data.rss.channel[0].item;
+  const entries = data.rss.channel[0].item.filter(
+    (item) => new Date(item.pubDate).getDay() === 0
+  );
   return entries.map((entry) => {
     return {
       content: processContent(entry["content:encoded"]),

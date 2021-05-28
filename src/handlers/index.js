@@ -1,16 +1,17 @@
 const texts = require("../../resources/texts");
 const speech = require("../speech");
-const speechCache = require("../speech/cache");
+const speechHelpers = require("../speech/helpers");
 
 module.exports.LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === "LaunchRequest";
   },
   handle(handlerInput) {
+    const welcomeText = speechHelpers.getWelcomeText();
     return handlerInput.responseBuilder
-      .speak(texts.welcomeText)
-      .reprompt(texts.welcomeText)
-      .withSimpleCard(texts.title, texts.welcomeText)
+      .speak(welcomeText)
+      .reprompt(welcomeText)
+      .withSimpleCard(texts.title, welcomeText)
       .getResponse();
   },
 };
@@ -31,8 +32,9 @@ const saveSessionInfo = (handlerInput, bonilistaIndex, bonilistaPart = 0) => {
   const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
   sessionAttributes.bonilistaPart = bonilistaPart;
   //save release date in order to avoid problems on refresh data.
-  sessionAttributes.bonilistaReleaseDate =
-    speechCache.getReleaseDateOfBonilista(bonilistaIndex);
+  sessionAttributes.bonilistaReleaseDate = speechHelpers.getReleaseDateOfBonilista(
+    bonilistaIndex
+  );
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 };
 
@@ -46,7 +48,7 @@ const getBonilistaNewsletter = (handlerInput) => {
   return handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletter(bonilistaIndex))
     .reprompt(texts.sectionReprompt)
-    .withSimpleCard(texts.title, texts.helpTextCard)
+    .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 };
 
@@ -56,7 +58,7 @@ const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
   return handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletter(bonilistaIndex))
     .reprompt(texts.sectionReprompt)
-    .withSimpleCard(texts.title, texts.helpTextCard)
+    .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 };
 
@@ -72,7 +74,7 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
     return handlerInput.responseBuilder
       .speak(speech.getSpeechNewsletter(weeksAgo))
       .reprompt(texts.sectionReprompt)
-      .withSimpleCard(texts.title, texts.helpTextCard)
+      .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
       .getResponse();
   } else {
     getHelpResponse(handlerInput);
@@ -80,8 +82,10 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
 };
 
 const getNextPartResponse = (handlerInput) => {
-  const { bonilistaReleaseDate, bonilistaPart } = retrieveSessionInfo(handlerInput);
-  const bonilistaIndex = speechCache.getSpeechCache.find(entry => entry.releaseDate === releaseDate);
+  const { bonilistaReleaseDate, bonilistaPart } = retrieveSessionInfo(
+    handlerInput
+  );
+  const bonilistaIndex = speechHelpers.getIndexFromReleaseDate(releaseDate);
   if (!bonilistaIndex) {
     saveSessionInfo(handlerInput, null, null);
     return getHelpResponse(handlerInput);
@@ -98,7 +102,7 @@ const getNextPartResponse = (handlerInput) => {
     return handlerInput.responseBuilder
       .speak(currentSpeech)
       .reprompt(texts.sectionReprompt)
-      .withSimpleCard(texts.title, texts.helpTextCard)
+      .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
       .getResponse();
   } else {
     saveSessionInfo(handlerInput, null, null);
@@ -110,7 +114,7 @@ const getBonilistaTitles = (handlerInput) =>
   handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletterTitles())
     .reprompt(texts.sectionReprompt)
-    .withSimpleCard(texts.title, texts.helpTextCard)
+    .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 
 const getStopResponse = (handlerInput) =>
@@ -123,7 +127,7 @@ const getHelpResponse = (handlerInput) =>
   handlerInput.responseBuilder
     .speak(texts.sectionReprompt)
     .reprompt(texts.sectionReprompt)
-    .withSimpleCard(texts.title, texts.helpTextCard)
+    .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 
 module.exports.IntentRequestHandler = {

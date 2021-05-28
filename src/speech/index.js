@@ -1,19 +1,24 @@
-const speechCache = require('./cache')
+const speechHelpers = require("./helpers");
 
 module.exports.getSpeechNewsletterPart = (bonilistaIndex, bonilistaPart) => {
-  return speechCache.getSpeechContent(bonilistaIndex, bonilistaPart);
+  return speechHelpers.getSpeechContent(bonilistaIndex, bonilistaPart);
 };
 
 module.exports.getSpeechNewsletter = (bonilistaIndex) => {
-  if (bonilistaIndex === 10) {
-    return texts.helpTenWeeksAgo;
-  } else if (bonilistaIndex > 10) {
-    return texts.helpText;
+  const articlesNum = speechHelpers.getArticlesNum();
+  
+  if (bonilistaIndex === articlesNum) {
+    return speechHelpers.getHelpMaxWeeksAgo();
+  } else if (bonilistaIndex > articlesNum) {
+    return speechHelpers.getHelpText();
   } else {
-    return speechCache.getSpeechContent(bonilistaIndex, 0) || texts.helpText;
+    return (
+      speechHelpers.getSpeechContent(bonilistaIndex, 0) ||
+      speechHelpers.getHelpText()
+    );
   }
 };
 
 module.exports.getSpeechNewsletterTitles = () => {
-  return speechCache.getSpeechTitles();
+  return speechHelpers.getSpeechTitles();
 };
