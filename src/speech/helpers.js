@@ -24,7 +24,7 @@ module.exports.getReleaseDateOfBonilista = (bonilistaIndex) => {
 };
 
 module.exports.getIndexFromReleaseDate = (releaseDate) => {
-  return speechCache.articles.find(
+  return speechCache.articles.findIndex(
     (article) => article.releaseDate === releaseDate
   );
 };
@@ -47,4 +47,8 @@ module.exports.getHelpMaxWeeksAgo = () => {
 
 module.exports.getHelpTextCard = () => {
   return speechCache.helpTextCard;
+};
+
+module.exports.getSectionRepromptText = () => {
+  return speechCache.sectionReprompt;
 };

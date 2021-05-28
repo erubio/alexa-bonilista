@@ -47,7 +47,7 @@ const getBonilistaNewsletter = (handlerInput) => {
   saveSessionInfo(handlerInput, bonilistaIndex);
   return handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletter(bonilistaIndex))
-    .reprompt(texts.sectionReprompt)
+    .reprompt(speechHelpers.getSectionRepromptText())
     .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 };
@@ -57,7 +57,7 @@ const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
   saveSessionInfo(handlerInput, bonilistaIndex);
   return handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletter(bonilistaIndex))
-    .reprompt(texts.sectionReprompt)
+    .reprompt(speechHelpers.getSectionRepromptText())
     .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 };
@@ -73,7 +73,7 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
     saveSessionInfo(handlerInput, weeksAgo);
     return handlerInput.responseBuilder
       .speak(speech.getSpeechNewsletter(weeksAgo))
-      .reprompt(texts.sectionReprompt)
+      .reprompt(speechHelpers.getSectionRepromptText())
       .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
       .getResponse();
   } else {
@@ -85,7 +85,9 @@ const getNextPartResponse = (handlerInput) => {
   const { bonilistaReleaseDate, bonilistaPart } = retrieveSessionInfo(
     handlerInput
   );
-  const bonilistaIndex = speechHelpers.getIndexFromReleaseDate(releaseDate);
+  const bonilistaIndex = speechHelpers.getIndexFromReleaseDate(
+    bonilistaReleaseDate
+  );
   if (!bonilistaIndex) {
     saveSessionInfo(handlerInput, null, null);
     return getHelpResponse(handlerInput);
@@ -101,7 +103,7 @@ const getNextPartResponse = (handlerInput) => {
     saveSessionInfo(handlerInput, bonilistaReleaseDate, currentPart);
     return handlerInput.responseBuilder
       .speak(currentSpeech)
-      .reprompt(texts.sectionReprompt)
+      .reprompt(speechHelpers.getSectionRepromptText())
       .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
       .getResponse();
   } else {
@@ -113,7 +115,7 @@ const getNextPartResponse = (handlerInput) => {
 const getBonilistaTitles = (handlerInput) =>
   handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletterTitles())
-    .reprompt(texts.sectionReprompt)
+    .reprompt(speechHelpers.getSectionRepromptText())
     .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 
@@ -125,8 +127,8 @@ const getStopResponse = (handlerInput) =>
 
 const getHelpResponse = (handlerInput) =>
   handlerInput.responseBuilder
-    .speak(texts.sectionReprompt)
-    .reprompt(texts.sectionReprompt)
+    .speak(speechHelpers.getSectionRepromptText())
+    .reprompt(speechHelpers.getSectionRepromptText())
     .withSimpleCard(texts.title, speechHelpers.getHelpTextCard())
     .getResponse();
 

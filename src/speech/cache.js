@@ -8,7 +8,8 @@ const speechCache = {
   welcomeMessage: "",
   helpText: "",
   helpTextCard: "",
-  helpMaxWeeksAgo: ""
+  helpMaxWeeksAgo: "",
+  sectionReprompt: ""
 };
 
 const addEngLangTags = (content) => {
@@ -94,6 +95,7 @@ const generateAndSaveSpeeches = (feed) => {
   speechCache.helpText = setWeeksToText(texts.helpText);
   speechCache.helpTextCard = setWeeksToText(texts.helpTextCard);
   speechCache.helpMaxWeeksAgo = setWeeksToText(texts.helpMaxWeeksAgo);
+  speechCache.sectionReprompt = setWeeksToText(texts.sectionReprompt);
 };
 
 const getTextTitleByWeek = (title, i) => {
