@@ -88,7 +88,7 @@ const getNextPartResponse = (handlerInput) => {
   const bonilistaIndex = speechHelpers.getIndexFromReleaseDate(
     bonilistaReleaseDate
   );
-  if (!bonilistaIndex) {
+  if (bonilistaIndex === -1) {
     saveSessionInfo(handlerInput, null, null);
     return getHelpResponse(handlerInput);
   }
