@@ -29,12 +29,12 @@ module.exports.ErrorHandler = {
 };
 
 const saveSessionInfo = (handlerInput, bonilistaIndex, bonilistaPart = 0) => {
-  const sessionAttributes =
-    handlerInput.attributesManager.getSessionAttributes();
+  const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
   sessionAttributes.bonilistaPart = bonilistaPart;
   //save release date in order to avoid problems on refresh data.
-  sessionAttributes.bonilistaReleaseDate =
-    speechHelpers.getReleaseDateOfBonilista(bonilistaIndex);
+  sessionAttributes.bonilistaReleaseDate = speechHelpers.getReleaseDateOfBonilista(
+    bonilistaIndex
+  );
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 };
 
@@ -44,10 +44,7 @@ const retrieveSessionInfo = (handlerInput) => {
 
 const getBonilistaNewsletter = (handlerInput) => {
   const bonilistaIndex = 0;
-  saveSessionInfo(
-    handlerInput,
-    speechHelpers.getReleaseDateOfBonilista(bonilistaIndex)
-  );
+  saveSessionInfo(handlerInput, bonilistaIndex);
   return handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletter(bonilistaIndex))
     .reprompt(speechHelpers.getSectionRepromptText())
@@ -57,10 +54,7 @@ const getBonilistaNewsletter = (handlerInput) => {
 
 const getBonilistaNewsletterOneWeekAgo = (handlerInput) => {
   const bonilistaIndex = 1;
-  saveSessionInfo(
-    handlerInput,
-    speechHelpers.getReleaseDateOfBonilista(bonilistaIndex)
-  );
+  saveSessionInfo(handlerInput, bonilistaIndex);
   return handlerInput.responseBuilder
     .speak(speech.getSpeechNewsletter(bonilistaIndex))
     .reprompt(speechHelpers.getSectionRepromptText())
@@ -76,10 +70,7 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
     1;
 
   if (weeksAgo) {
-    saveSessionInfo(
-      handlerInput,
-      speechHelpers.getReleaseDateOfBonilista(bonilistaIndex)
-    );
+    saveSessionInfo(handlerInput, weeksAgo);
     return handlerInput.responseBuilder
       .speak(speech.getSpeechNewsletter(weeksAgo))
       .reprompt(speechHelpers.getSectionRepromptText())
@@ -91,10 +82,12 @@ const getBonilistaWeeksAgoNewsletter = (handlerInput) => {
 };
 
 const getNextPartResponse = (handlerInput) => {
-  const { bonilistaReleaseDate, bonilistaPart } =
-    retrieveSessionInfo(handlerInput);
-  const bonilistaIndex =
-    speechHelpers.getIndexFromReleaseDate(bonilistaReleaseDate);
+  const { bonilistaReleaseDate, bonilistaPart } = retrieveSessionInfo(
+    handlerInput
+  );
+  const bonilistaIndex = speechHelpers.getIndexFromReleaseDate(
+    bonilistaReleaseDate
+  );
   if (bonilistaIndex === -1) {
     saveSessionInfo(handlerInput, null, null);
     return getHelpResponse(handlerInput);
@@ -107,7 +100,7 @@ const getNextPartResponse = (handlerInput) => {
   );
 
   if (currentSpeech) {
-    saveSessionInfo(handlerInput, bonilistaReleaseDate, currentPart);
+    saveSessionInfo(handlerInput, bonilistaIndex, currentPart);
     return handlerInput.responseBuilder
       .speak(currentSpeech)
       .reprompt(speechHelpers.getSectionRepromptText())
