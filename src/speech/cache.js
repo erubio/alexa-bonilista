@@ -17,8 +17,9 @@ const addEngLangTags = (content) => {
   let processedContent = content;
   if (quotes && quotes.length > 0) {
     quotes.forEach((quote) => {
-      const langDetected = lngDetector.detect(quote)[0][0];
-      const langPercent = lngDetector.detect(quote)[0][1];
+      const detect = lngDetector.detect(quote);
+      const langDetected = detect && detect[0] && detect[0][0];
+      const langPercent = detect && detect[0] && detect[0][1];
       if (
         (langDetected === "english" || langDetected === "dutch") &&
         langPercent > 0.21
